@@ -58,8 +58,8 @@ typedef struct XeniumState {
 
 uint32_t xenium_mask_flash_address(uint32_t address, const char* mask) {
     uint32_t translation = address;
-    for (int i = 2; i >= 0; i--) {
-        uint32_t bitval = 1 << (i + 18);
+    for (int i = 0; i < 3; i++) {
+        uint32_t bitval = 1 << (20 - i);
         switch(mask[i]) {
             case '1': translation |= bitval; break;
             case '0': translation &= ~bitval; break;
