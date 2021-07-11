@@ -2776,6 +2776,7 @@ DEF_METHOD(NV097, SET_TEXTURE_SET_BUMP_ENV_MAT)
     }
     else {
         // FIXME: undefined behavior? bumpmaps not valid for texture stage 0
+        assert(parameter == 0.0f);
     }
 }
 
@@ -2790,6 +2791,7 @@ DEF_METHOD(NV097, SET_TEXTURE_SET_BUMP_ENV_SCALE)
         pg->regs[NV_PGRAPH_BUMPSCALE1 + --slot * 4] = parameter;
     } else {
         // FIXME: undefined behavior? bumpmaps not valid for texture stage 0
+        assert(parameter == 0.0f);
     }
 }
 
@@ -2804,6 +2806,7 @@ DEF_METHOD(NV097, SET_TEXTURE_SET_BUMP_ENV_OFFSET)
         pg->regs[NV_PGRAPH_BUMPOFFSET1 + --slot * 4] = parameter;
     } else {
         // FIXME: undefined behavior? bumpmaps not valid for texture stage 0
+        assert(parameter == 0.0f);
     }
 }
 
