@@ -2766,25 +2766,45 @@ DEF_METHOD(NV097, SET_TEXTURE_BORDER_COLOR)
 DEF_METHOD(NV097, SET_TEXTURE_SET_BUMP_ENV_MAT)
 {
     int slot = (method - NV097_SET_TEXTURE_SET_BUMP_ENV_MAT) / 4;
-    assert((slot / 16) > 0);
-    slot -= 16;
-    pg->bump_env_matrix[slot / 16][slot % 4] = *(float*)&parameter;
+    int slot_index = slot / 16;
+    //fprintf(stderr, "nv2a: SET_TEXTURE_SET_BUMP_ENV_MAT slot %d val %f\n", slot, *(float*)&parameter);
+
+    assert(slot_index >= 0 && slot_index < 4);
+
+    if (slot_index > 0) {
+        pg->bump_env_matrix[--slot_index][slot % 4] = *(float*)&parameter;
+    }
+    else {
+        // FIXME: undefined behavior? bumpmaps not valid for texture stage 0
+    }
 }
 
 DEF_METHOD(NV097, SET_TEXTURE_SET_BUMP_ENV_SCALE)
 {
     int slot = (method - NV097_SET_TEXTURE_SET_BUMP_ENV_SCALE) / 64;
-    assert(slot > 0);
-    slot--;
-    pg->regs[NV_PGRAPH_BUMPSCALE1 + slot * 4] = parameter;
+    //fprintf(stderr, "nv2a: SET_TEXTURE_SET_BUMP_ENV_SCALE slot %d val %f\n", slot, parameter);
+
+    assert(slot >= 0 && slot < 4);
+
+    if (slot > 0) {
+        pg->regs[NV_PGRAPH_BUMPSCALE1 + --slot * 4] = parameter;
+    } else {
+        // FIXME: undefined behavior? bumpmaps not valid for texture stage 0
+    }
 }
 
 DEF_METHOD(NV097, SET_TEXTURE_SET_BUMP_ENV_OFFSET)
 {
     int slot = (method - NV097_SET_TEXTURE_SET_BUMP_ENV_OFFSET) / 64;
-    assert(slot > 0);
-    slot--;
-    pg->regs[NV_PGRAPH_BUMPOFFSET1 + slot * 4] = parameter;
+    //fprintf(stderr, "nv2a: SET_TEXTURE_SET_BUMP_ENV_OFFSET slot %d val %f\n", slot, parameter);
+
+    assert(slot >= 0 && slot < 4);
+
+    if (slot > 0) {
+        pg->regs[NV_PGRAPH_BUMPOFFSET1 + --slot * 4] = parameter;
+    } else {
+        // FIXME: undefined behavior? bumpmaps not valid for texture stage 0
+    }
 }
 
 DEF_METHOD(NV097, ARRAY_ELEMENT16)
